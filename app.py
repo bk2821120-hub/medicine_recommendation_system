@@ -7,7 +7,7 @@ st.set_page_config(page_title="SmartCare Health", layout="wide")
 st.title("🩺 SmartCare Health – Disease Prediction")
 
 # ================= LOAD MODEL =================
-model = pickle.load(open("model.pkl", "rb"))
+model = pickle.load(open("svc.pkl", "rb"))
 
 # ================= FULL SYMPTOMS DICTIONARY =================
 symptoms_dict = {
@@ -84,3 +84,4 @@ if st.button("Predict Disease"):
     else:
         disease = predict_disease(selected_symptoms)
         st.success(f"🧠 Predicted Disease: **{disease}**")
+
