@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SmartCare Health - Symptoms Guide</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f8f9fa;
+      padding: 20px;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    .symptom-card {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .symptom-card:hover {
+      transform: scale(1.02);
+    }
+    .symptom-title {
+      font-weight: bold;
+      color: #198754;
+      margin-bottom: 10px;
+      font-size: 1.25rem;
+    }
+    .symptom-description {
+      color: #333333;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #0d6efd;
+    }
+    .home-btn {
+      text-decoration: none;
+      background-color: #0d6efd;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: bold;
+    }
+    .home-btn:hover {
+      background-color: #0b5ed7;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="top-bar">
+    <h1>SmartCare Health - Symptoms Guide</h1>
+    <a href="index.html" class="home-btn">Home</a>
+  </div>
+
+  <div id="symptoms-container"></div>
+</div>
+
+<script>
+  // Full list of symptoms with book-style descriptions
+  const symptoms = [
+    { name: "itching", description: "A sensation that provokes the desire to scratch. Often caused by dry skin, allergies, or infections." },
+    { name: "skin_rash", description: "Visible skin changes like redness, bumps, or inflammation, typically due to allergies, infection, or irritation." },
+    { name: "nodal_skin_eruptions", description: "Inflamed nodules on the skin often linked to systemic infections or immune responses." },
+    { name: "continuous_sneezing", description: "Repeated sneezing episodes indicating allergies, infections, or irritants in the nasal passage." },
+    { name: "shivering", description: "Involuntary trembling, usually due to cold, fever, or illness." },
+    { name: "chills", description: "A feeling of cold accompanied by shivering, often associated with fever or infection." },
+    { name: "joint_pain", description: "Pain in one or more joints caused by inflammation, injury, or chronic conditions like arthritis." },
+    { name: "stomach_pain", description: "Discomfort in the abdominal area, indicating digestive issues or infections." },
+    { name: "acidity", description: "A burning sensation in the chest or stomach caused by excessive stomach acid." },
+    { name: "ulcers_on_tongue", description: "Painful sores on the tongue, often due to infections, vitamin deficiencies, or irritation." },
+    { name: "muscle_wasting", description: "Reduction in muscle mass due to malnutrition, illness, or prolonged inactivity." },
+    { name: "vomiting", description: "Forceful expulsion of stomach contents, commonly a symptom of illness, infection, or food poisoning." },
+    { name: "burning_micturition", description: "A burning sensation during urination, often indicating urinary tract infections." },
+    { name: "spotting_urination", description: "Presence of blood in urine or unusual spotting, requiring medical evaluation." },
+    { name: "fatigue", description: "Persistent tiredness or lack of energy, commonly linked to stress, illness, or poor sleep." },
+    { name: "weight_gain", description: "Increase in body weight, sometimes caused by dietary changes, hormonal imbalance, or inactivity." },
+    { name: "anxiety", description: "Feelings of nervousness or worry, which may affect daily life and sleep." },
+    { name: "cold_hands_and_feets", description: "Reduced blood circulation or low body temperature causing cold extremities." },
+    { name: "mood_swings", description: "Rapid changes in mood, possibly linked to hormonal changes, stress, or neurological issues." },
+    { name: "weight_loss", description: "Unintended reduction in body weight, which may indicate illness or nutritional deficiency." },
+    { name: "restlessness", description: "Inability to relax or remain still, often related to anxiety or neurological conditions." },
+    { name: "lethargy", description: "A state of tiredness, inactivity, or lack of enthusiasm, potentially indicating underlying illness." },
+    { name: "patches_in_throat", description: "White or red patches in the throat, often due to infections or inflammation." },
+    { name: "irregular_sugar_level", description: "Fluctuating blood sugar, commonly associated with diabetes or metabolic disorders." },
+    { name: "cough", description: "A reflex action to clear the airway, can indicate infection, allergies, or respiratory conditions." },
+    { name: "high_fever", description: "Elevated body temperature indicating infection or inflammation." },
+    { name: "sunken_eyes", description: "Eyes that appear recessed, often linked to dehydration or illness." },
+    { name: "breathlessness", description: "Difficulty breathing, potentially caused by respiratory or cardiac conditions." },
+    { name: "sweating", description: "Excessive perspiration, which may result from heat, stress, or medical conditions." },
+    { name: "dehydration", description: "Loss of body fluids leading to dry mouth, thirst, and reduced urination." },
+    { name: "indigestion", description: "Discomfort or pain in the stomach due to difficulty digesting food." },
+    { name: "headache", description: "Pain or pressure in the head, which can be tension, migraine, or caused by illness." },
+    { name: "yellowish_skin", description: "Skin with a yellow tint, often indicating liver or gallbladder issues." },
+    { name: "dark_urine", description: "Deep-colored urine, which can be a sign of dehydration or liver problems." },
+    { name: "nausea", description: "A feeling of sickness or the urge to vomit." },
+    { name: "loss_of_appetite", description: "Reduced desire to eat, often due to illness or psychological factors." },
+    { name: "pain_behind_the_eyes", description: "Discomfort located behind the eyes, possibly linked to sinusitis or migraine." },
+    { name: "back_pain", description: "Pain along the spine or lower back, often caused by muscle strain or spinal issues." },
+    { name: "constipation", description: "Difficulty passing stools, often due to diet, hydration, or digestive issues." },
+    { name: "abdominal_pain", description: "Pain in the stomach area, signaling digestive, urinary, or reproductive problems." },
+    { name: "diarrhoea", description: "Frequent loose or watery stools, typically caused by infection or dietary factors." },
+    { name: "mild_fever", description: "Slight increase in body temperature, often signaling infection or inflammation." },
+    { name: "yellow_urine", description: "Normal yellow urine color; significant deviations can indicate health issues." },
+    { name: "yellowing_of_eyes", description: "Jaundice, often related to liver conditions." },
+    { name: "acute_liver_failure", description: "Severe and sudden loss of liver function requiring immediate medical attention." },
+    { name: "fluid_overload", description: "Excess fluid in the body, potentially due to heart, kidney, or liver conditions." },
+    { name: "swelling_of_stomach", description: "Abdominal bloating caused by fluid retention or digestive disorders." },
+    { name: "swelled_lymph_nodes", description: "Enlarged lymph nodes indicating infection or immune response." },
+    { name: "malaise", description: "A general feeling of discomfort or unease." },
+    { name: "blurred_and_distorted_vision", description: "Visual disturbances that may be due to eye or neurological issues." },
+    { name: "phlegm", description: "Thick mucus produced in the respiratory tract." },
+    { name: "throat_irritation", description: "Soreness or scratchiness in the throat due to infection or irritation." },
+    { name: "redness_of_eyes", description: "Inflamed or bloodshot eyes, commonly caused by irritation or infection." },
+    { name: "sinus_pressure", description: "Pressure around the nose or forehead due to sinus congestion." },
+    { name: "runny_nose", description: "Excess nasal discharge, usually due to cold or allergies." },
+    { name: "congestion", description: "Blocked nasal passages causing difficulty breathing." },
+    { name: "chest_pain", description: "Discomfort or pain in the chest, potentially serious if related to heart or lungs." },
+    { name: "weakness_in_limbs", description: "Reduced strength in arms or legs, often due to illness or neurological problems." },
+    { name: "fast_heart_rate", description: "Rapid heartbeat, which may indicate stress, fever, or cardiovascular issues." },
+    { name: "pain_during_bowel_movements", description: "Discomfort or pain while passing stools, often linked to hemorrhoids or anal fissures." },
+    { name: "pain_in_anal_region", description: "Localized discomfort in the anal area due to fissures, hemorrhoids, or infection." },
+    { name: "bloody_stool", description: "Presence of blood in stools, which can signal gastrointestinal issues." },
+    { name: "irritation_in_anus", description: "Itching or discomfort in the anal region." },
+    { name: "neck_pain", description: "Pain in the cervical spine or neck muscles, often from strain or posture." },
+    { name: "dizziness", description: "Feeling lightheaded or unsteady, possibly caused by inner ear issues or low blood pressure." },
+    { name: "cramps", description: "Sudden, involuntary muscle contractions, often in legs or abdomen." },
+    { name: "bruising", description: "Discoloration of the skin from blood under the surface, often due to injury." },
+    { name: "obesity", description: "Excess body fat increasing health risks, often caused by diet, genetics, or lifestyle." },
+    { name: "swollen_legs", description: "Leg edema due to fluid retention, injury, or circulatory problems." },
+    { name: "swollen_blood_vessels", description: "Visible or inflamed veins often related to circulation issues." },
+    { name: "puffy_face_and_eyes", description: "Swelling around eyes or face, potentially from fluid retention or allergies." },
+    { name: "enlarged_thyroid", description: "Swelling in the neck due to thyroid gland enlargement." },
+    { name: "brittle_nails", description: "Weak or fragile nails, often from nutritional deficiency or thyroid issues." },
+    { name: "swollen_extremeties", description: "Hands or feet swelling due to fluid retention, injury, or inflammation." },
+    { name: "excessive_hunger", description: "Persistent desire to eat, sometimes linked to blood sugar issues or metabolic disorders." },
+    { name: "extra_marital_contacts", description: "High-risk sexual behavior that may impact overall health." },
+    { name: "drying_and_tingling_lips", description: "Discomfort or numbness in lips, sometimes due to dehydration or vitamin deficiency." },
+    { name: "slurred_speech", description: "Difficulty speaking clearly, potentially due to neurological conditions." },
+    { name: "knee_pain", description: "Pain in the knee joint due to injury, arthritis, or overuse." },
+    { name: "hip_joint_pain", description: "Discomfort in the hip joint, possibly from arthritis or injury." },
+    { name: "muscle_weakness", description: "Reduced muscle strength caused by illness, injury, or nutritional deficiency." },
+    { name: "stiff_neck", description: "Difficulty moving the neck due to muscle tension or injury." },
+    { name: "swelling_joints", description: "Inflammation in joints, commonly associated with arthritis." },
+    { name: "movement_stiffness", description: "Difficulty in moving limbs, often due to arthritis or muscle issues." },
+    { name: "spinning_movements", description: "Vertigo or spinning sensation, possibly linked to inner ear or neurological problems." },
+    { name: "loss_of_balance", description: "Difficulty maintaining balance, which can result from neurological or inner ear issues." },
+    { name: "unsteadiness", description: "General instability while standing or walking." },
+    { name: "weakness_of_one_body_side", description: "Hemiparesis, often caused by neurological events like stroke." },
+    { name: "loss_of_smell", description: "Anosmia, commonly due to infections or neurological conditions." },
+    { name: "bladder_discomfort", description: "Pain or irritation during urination, possibly indicating infection." },
+    { name: "foul_smell_of_urine", description: "Unpleasant odor in urine, sometimes caused by infection or dehydration." },
+    { name: "continuous_feel_of_urine", description: "Frequent urge to urinate, possibly due to urinary tract issues." },
+    { name: "passage_of_gases", description: "Release of intestinal gas, a normal digestive process unless excessive." },
+    { name: "internal_itching", description: "Itching inside the body, potentially caused by allergies or infections." },
+    { name: "toxic_look_(typhos)", description: "Appearance indicating severe infection or illness." },
+    { name: "depression", description: "Persistent low mood affecting daily life and well-being." },
+    { name: "irritability", description: "Easily annoyed or angered, often linked to stress or health issues." },
+    { name: "muscle_pain", description: "Aching muscles due to strain, illness, or infection." },
+    { name: "altered_sensorium", description: "Confusion or change in awareness, requiring medical evaluation." },
+    { name: "red_spots_over_body", description: "Visible red marks, possibly due to allergic reactions or infections." },
+    { name: "belly_pain", description: "Abdominal discomfort, potentially caused by digestive or systemic issues." },
+    { name: "abnormal_menstruation", description: "Irregular menstrual cycles, possibly due to hormonal imbalances or health issues." },
+    { name: "dischromic_patches", description: "Changes in skin color, indicating skin disorders or infections." },
+    { name: "watering_from_eyes", description: "Excessive tear production, often due to irritation or infection." },
+    { name: "increased_appetite", description: "Heightened desire to eat, sometimes linked to metabolic or hormonal factors." },
+    { name: "polyuria", description: "Excessive urination, often associated with diabetes or kidney issues." },
+    { name: "family_history", description: "Genetic predisposition to diseases based on family medical history." },
+    { name: "mucoid_sputum", description: "Thick mucus from the lungs, often due to respiratory infections." },
+    { name: "rusty_sputum", description: "Sputum with blood-tinge, indicating possible infection or lung injury." },
+    { name: "lack_of_concentration", description: "Difficulty focusing, often due to fatigue, stress, or neurological conditions." },
+    { name: "visual_disturbances", description: "Blurred or double vision, sometimes linked to eye or neurological problems." },
+    { name: "receiving_blood_transfusion", description: "Medical history of transfusions, relevant for infections or immune reactions." },
+    { name: "receiving_unsterile_injections", description: "Risk factor for infections or systemic complications." },
+    { name: "coma", description: "State of unconsciousness, requiring immediate medical attention." },
+    { name: "stomach_bleeding", description: "Internal bleeding in the stomach, potentially life-threatening." },
+    { name: "distention_of_abdomen", description: "Swelling of the abdomen due to fluid or gas accumulation." },
+    { name: "history_of_alcohol_consumption", description: "Past alcohol use, affecting liver and systemic health." },
+    { name: "fluid_overload_1", description: "Excess fluid in the body, similar to edema or heart/kidney complications." },
+    { name: "blood_in_sputum", description: "Presence of blood in respiratory secretions, requiring evaluation." },
+    { name: "prominent_veins_on_calf", description: "Visible veins, potentially linked to circulatory issues or varicose veins." },
+    { name: "palpitations", description: "Noticeable rapid or irregular heartbeat." },
+    { name: "painful_walking", description: "Difficulty or pain while walking, often due to joint, muscle, or nerve issues." },
+    { name: "pus_filled_pimples", description: "Inflamed skin lesions containing pus, typically due to bacterial infection." },
+    { name: "blackheads", description: "Clogged hair follicles with dark appearance, common in acne." },
+    { name: "scurring", description: "Flaking or scaling of skin, often linked to dermatological conditions." },
+    { name: "skin_peeling", description: "Loss of outer skin layer, often due to sunburn, infection, or irritation." },
+    { name: "silver_like_dusting", description: "Silvery scales on skin, typical of psoriasis." },
+    { name: "small_d
